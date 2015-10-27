@@ -253,6 +253,7 @@ class MoneyField(models.DecimalField):
         self.currency_choices = currency_choices
         self.frozen_by_south = kwargs.pop('frozen_by_south', False)
 
+        self.null_option_value = nullable
         super(MoneyField, self).__init__(verbose_name, name, max_digits,
                                          decimal_places, default=default,
                                          **kwargs)
@@ -285,7 +286,8 @@ class MoneyField(models.DecimalField):
             c_field = CurrencyField(
                 max_length=3, price_field=self,
                 default=self.default_currency, editable=False,
-                choices=self.currency_choices
+                choices=self.currency_choices,
+                null=self.null_option_value
             )
             c_field.creation_counter = self.creation_counter
             cls.add_to_class(c_field_name, c_field)
